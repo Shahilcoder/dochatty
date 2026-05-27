@@ -1,0 +1,89 @@
+import * as React from "react";
+import { cn } from "@/lib/utils";
+
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  interactive?: boolean;
+  tone?: "default" | "raised" | "primary";
+}
+
+export function Card({
+  className,
+  interactive,
+  tone = "default",
+  ...rest
+}: CardProps) {
+  return (
+    <div
+      className={cn(
+        "rounded-lg border transition-all duration-150",
+        tone === "default" &&
+          "bg-surface-container-low border-outline-variant/60",
+        tone === "raised" &&
+          "bg-surface-container border-outline-variant/60",
+        tone === "primary" &&
+          "bg-surface-container-high border-neon-blue/30 shadow-glow-primary-soft",
+        interactive &&
+          "hover:border-neon-blue/60 hover:shadow-glow-primary cursor-pointer",
+        className,
+      )}
+      {...rest}
+    />
+  );
+}
+
+export function CardHeader({
+  className,
+  ...rest
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "px-5 pt-4 pb-2 flex items-start justify-between gap-3",
+        className,
+      )}
+      {...rest}
+    />
+  );
+}
+
+export function CardTitle({
+  className,
+  ...rest
+}: React.HTMLAttributes<HTMLHeadingElement>) {
+  return (
+    <h3
+      className={cn(
+        "text-pure-white text-[17px] font-semibold leading-tight",
+        className,
+      )}
+      {...rest}
+    />
+  );
+}
+
+export function CardBody({
+  className,
+  ...rest
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn("px-5 py-3 text-on-surface-variant text-[14.5px]", className)}
+      {...rest}
+    />
+  );
+}
+
+export function CardFooter({
+  className,
+  ...rest
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "px-5 pt-2 pb-4 flex items-center justify-between gap-3",
+        className,
+      )}
+      {...rest}
+    />
+  );
+}
