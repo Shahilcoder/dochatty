@@ -65,7 +65,7 @@ export function MessageContent({
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          p: ({ children }) => <p>{transform(children)}</p>,
+          p: ({ children }) => <div className="chat-p">{transform(children)}</div>,
           li: ({ children }) => <li>{transform(children)}</li>,
           strong: ({ children }) => (
             <strong className="text-pure-white">{transform(children)}</strong>

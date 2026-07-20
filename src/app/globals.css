@@ -210,10 +210,12 @@
   font-size: 15px;
   line-height: 1.6;
 }
-.prose-chat p {
+.prose-chat p,
+.prose-chat .chat-p {
   margin: 0 0 0.75em;
 }
-.prose-chat p:last-child {
+.prose-chat p:last-child,
+.prose-chat .chat-p:last-child {
   margin-bottom: 0;
 }
 .prose-chat ul,
