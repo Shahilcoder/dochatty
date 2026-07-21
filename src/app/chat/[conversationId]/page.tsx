@@ -52,7 +52,7 @@ export default async function ChatPage({
 
   return (
     <div className="flex flex-col h-screen">
-      <header className="flex items-center gap-3 px-4 h-14 border-b border-outline-variant/50 shrink-0">
+      <header className="flex items-center gap-3 px-4 h-14 border-b border-outline shrink-0 bg-surface">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface text-[13.5px] transition-colors"
@@ -60,8 +60,8 @@ export default async function ChatPage({
           <ArrowLeft className="size-4" />
           Library
         </Link>
-        <div className="w-px h-5 bg-outline-variant/50" />
-        <h1 className="text-pure-white text-[15px] font-semibold truncate">
+        <div className="w-px h-5 bg-outline" />
+        <h1 className="text-on-surface text-[15px] font-semibold truncate">
           {conversation.title}
         </h1>
       </header>

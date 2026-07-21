@@ -1,39 +1,29 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type Tone = "neutral" | "live" | "warning" | "danger" | "neon";
+type Tone = "neutral" | "live" | "warning" | "danger" | "info";
 
 interface ChipProps extends React.HTMLAttributes<HTMLSpanElement> {
   tone?: Tone;
-  pixel?: boolean;
 }
 
 const toneStyles: Record<Tone, string> = {
-  neutral:
-    "border-outline-variant text-on-surface-variant bg-surface-container-low",
-  live: "border-growth-green/60 text-growth-green bg-tertiary/10",
-  warning: "border-warning-amber/60 text-warning-amber bg-secondary/10",
-  danger: "border-error/60 text-error bg-error/10",
-  neon: "border-neon-blue/60 text-neon-blue bg-neon-blue/10",
+  neutral: "bg-surface-container-high text-on-surface-variant",
+  live: "bg-primary-container text-on-primary-container",
+  warning: "bg-secondary-container text-on-secondary-container",
+  danger: "bg-error-container text-on-error-container",
+  info: "bg-tertiary-container text-on-tertiary-container",
 };
 
 /**
- * Pixel-Border style chip (DESIGN.md §Chips/Badges).
- * Rectangular, 1px solid border, no rounded pills.
+ * Status pill (DESIGN.md §Chips/Badges) — fully rounded, tinted, friendly.
  */
-export function Chip({
-  className,
-  tone = "neutral",
-  pixel = true,
-  children,
-  ...rest
-}: ChipProps) {
+export function Chip({ className, tone = "neutral", children, ...rest }: ChipProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 px-2 py-0.5 border text-[11px] uppercase tracking-[0.08em]",
-        "rounded-sm",
-        pixel && "font-[var(--font-pixel)]",
+        "inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full",
+        "text-[12px] font-medium leading-5",
         toneStyles[tone],
         className,
       )}

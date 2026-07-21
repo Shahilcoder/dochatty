@@ -19,7 +19,7 @@ Why now: the repo is a fresh `create-next-app` boilerplate. We have a chance to 
 | Chat scope | User-toggleable: default single-doc, can multi-select |
 | Chat history | Persisted in Postgres |
 | Auth | Password (single env-var), enforced in middleware |
-| Design | Per `DESIGN.md` — Cyber-Growth aesthetic, dark, neon accents |
+| Design | Per `DESIGN.md` — Calm Productivity (Evernote-inspired), light-first with dark variant, Evernote-green accent |
 | PDF citing | Document name + page number |
 | DOCX citing | Document name + nearest heading + paragraph index |
 
@@ -30,10 +30,10 @@ Why now: the repo is a fresh `create-next-app` boilerplate. We have a chance to 
 - **Storage**: `@vercel/blob`
 - **Parsing**: `unpdf` (PDF text + page extraction, Node-friendly fork of pdfjs-dist), `mammoth` (DOCX → HTML with structure preserved)
 - **Validation**: `zod`
-- **UI niceties**: `clsx` (or `tailwind-merge`), `lucide-react` for monoline icons (matches DESIGN.md "monoline or pixel-art")
+- **UI niceties**: `clsx` (or `tailwind-merge`), `lucide-react` for monoline (stroke-based) icons per DESIGN.md
 - **Markdown rendering** for answers: `react-markdown` + `remark-gfm`
 
-Fonts (via `next/font/google`): `Space Grotesk`, `Press Start 2P`, `Pixelify Sans`.
+Fonts (via `next/font/google`): `Inter` (UI/body/headings) and `JetBrains Mono` (citation locations + code) per DESIGN.md.
 
 ## Architecture
 
@@ -117,7 +117,7 @@ Embedding dimension: pin to **768** (Gemini's MRL default). Cheaper to store, pl
 ```
 src/
 ├── app/
-│   ├── layout.tsx                 # root layout: fonts (Space Grotesk, Press Start 2P, Pixelify Sans), color tokens
+│   ├── layout.tsx                 # root layout: fonts (Inter, JetBrains Mono), color tokens
 │   ├── globals.css                # tailwind v4 + DESIGN.md tokens via @theme inline
 │   ├── (auth)/
 │   │   └── login/page.tsx         # password gate UI
@@ -217,9 +217,9 @@ Client (`ChatThread.tsx`): reads the SSE stream, renders streaming markdown via 
 
 ## Citation rendering details
 
-- Inline chip: small pixel-bordered rectangle (per DESIGN.md "Pixel-Border" badge style), `text-[10px]` Pixelify Sans, e.g. `[1]`.
-- Popover content: source filename, location (`p. 5` or `§ Section 4.2 ¶17`), 3-line snippet, "Open at this location" link, "Copy quote" button.
-- The citation chip is the design centerpiece — make it obviously interactive (hover glow per DESIGN.md elevation rules).
+- Inline chip: a compact green-tinted pill with a green left accent and a JetBrains Mono numeral (the one place the Inter-only system earns typographic contrast), e.g. `1`.
+- Popover content: source filename (Inter), location in JetBrains Mono (`p. 5` or `§ Section 4.2 ¶17`), 3-line snippet, "Open at this location" link, "Copy quote" button.
+- The citation chip is the design signature — make it obviously interactive (hover deepens the green tint per DESIGN.md elevation rules).
 
 ## Auth gate
 
@@ -230,15 +230,15 @@ Client (`ChatThread.tsx`): reads the SSE stream, renders streaming markdown via 
 ## Design system implementation
 
 In `src/app/layout.tsx`:
-- Load `Space_Grotesk`, `Press_Start_2P`, `Pixelify_Sans` from `next/font/google`, register as CSS variables `--font-grotesk`, `--font-pixel-display`, `--font-pixel`.
-- Add `<html className="dark">` (force dark mode — Cyber-Growth is dark-first).
+- Load `Inter` (UI/body/headings) and `JetBrains_Mono` (citation chips / code) from `next/font/google`, register as CSS variables `--font-sans`, `--font-mono`.
+- Light-first: no forced `dark` class. Support a user-toggleable dark variant via `class="dark"` on `<html>` (or `prefers-color-scheme` default) mapping to the `dark-*` tokens in DESIGN.md.
 
 In `src/app/globals.css`:
-- Replace the boilerplate `:root` block with the full DESIGN.md color tokens as CSS custom properties.
-- Expose them to Tailwind via `@theme inline` so utilities like `bg-surface-container`, `text-on-surface`, `text-primary`, `border-outline-variant`, `text-neon-blue`, `bg-void-black` resolve.
-- Add a `.font-display`, `.font-pixel`, `.font-pixel-display` class set wired to the font variables.
-- Define an `--glow-primary` shadow var matching DESIGN.md "blur 15px, color primary" inner/outer glow for active cards.
-- Background: `bg-void-black` body, with optional decorative scan-line SVG bleed behind the main column.
+- Replace the boilerplate `:root` block with the full DESIGN.md light color tokens as CSS custom properties; define the `dark-*` tokens under a `.dark` selector (or `@media (prefers-color-scheme: dark)`).
+- Expose them to Tailwind via `@theme inline` so utilities like `bg-surface`, `bg-background`, `text-on-surface`, `text-on-surface-variant`, `text-primary`, `bg-primary-container`, `border-outline` resolve.
+- Wire `--font-sans` / `--font-mono` to Tailwind's font-family utilities so citation chips and code render in JetBrains Mono.
+- Define the DESIGN.md `shadow-*` scale as CSS vars (ink-tinted, low-opacity) for cards and floating surfaces; add a 2px green focus-ring utility.
+- Background: `bg-background` (off-white canvas) body; white surfaces lift off it via border + `shadow-sm`.
 
 ## Env vars
 

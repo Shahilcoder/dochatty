@@ -50,15 +50,15 @@ export function DocumentSelector({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex items-center gap-2 bg-surface-container border border-outline-variant/60 hover:border-neon-blue/50 rounded-md px-3 h-9 text-[13.5px] text-on-surface transition-colors max-w-[320px]"
+        className="inline-flex items-center gap-2 bg-surface border border-outline hover:border-primary/50 rounded-md px-3 h-9 text-[13.5px] text-on-surface shadow-sm transition-colors max-w-[320px]"
       >
-        <FileText className="size-3.5 text-neon-blue shrink-0" />
+        <FileText className="size-3.5 text-primary shrink-0" />
         <span className="truncate">{label}</span>
         <ChevronDown className="size-3.5 text-on-surface-variant shrink-0" />
       </button>
 
       {open ? (
-        <div className="absolute z-50 top-[calc(100%+6px)] left-0 w-[320px] max-h-[320px] overflow-y-auto bg-surface-container-high border border-outline-variant/60 rounded-md shadow-glow-primary-soft p-1.5">
+        <div className="absolute z-50 top-[calc(100%+6px)] left-0 w-[320px] max-h-[320px] overflow-y-auto bg-surface border border-outline rounded-lg shadow-lg p-1.5">
           {ready.length === 0 ? (
             <div className="px-3 py-4 text-[13px] text-on-surface-variant text-center">
               No ready documents yet.
@@ -72,25 +72,25 @@ export function DocumentSelector({
                   type="button"
                   onClick={() => toggle(d.id)}
                   className={cn(
-                    "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-sm text-left text-[13.5px] transition-colors",
+                    "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-md text-left text-[13.5px] transition-colors",
                     isSel
-                      ? "bg-neon-blue/15 text-pure-white"
-                      : "text-on-surface hover:bg-surface-container-highest",
+                      ? "bg-primary-container text-on-primary-container"
+                      : "text-on-surface hover:bg-surface-container-high",
                   )}
                 >
                   <span
                     className={cn(
                       "size-4 grid place-items-center border rounded-sm shrink-0",
                       isSel
-                        ? "bg-neon-blue border-neon-blue text-pure-white"
-                        : "border-outline-variant",
+                        ? "bg-primary border-primary text-on-primary"
+                        : "border-outline",
                     )}
                   >
                     {isSel ? <Check className="size-3" /> : null}
                   </span>
                   <span className="truncate flex-1">{d.filename}</span>
                   {d.pageCount ? (
-                    <span className="text-[11px] text-on-surface-variant font-[var(--font-pixel)] shrink-0">
+                    <span className="font-mono text-[11px] text-on-surface-variant shrink-0">
                       {d.pageCount}p
                     </span>
                   ) : null}

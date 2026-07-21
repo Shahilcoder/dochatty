@@ -39,7 +39,7 @@ export function ChatComposer({
   }
 
   return (
-    <div className="flex items-end gap-2 bg-surface-container-low border border-outline-variant/60 focus-within:border-neon-blue rounded-lg p-2 transition-colors">
+    <div className="flex items-end gap-2 bg-surface border border-outline focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 rounded-lg p-2 shadow-sm transition-all">
       <textarea
         ref={ref}
         value={value}
@@ -48,7 +48,7 @@ export function ChatComposer({
         rows={1}
         placeholder={placeholder}
         disabled={disabled}
-        className="flex-1 bg-transparent resize-none outline-none text-on-surface placeholder:text-outline px-2 py-1.5 text-[15px] max-h-[200px]"
+        className="flex-1 bg-transparent resize-none outline-none text-on-surface placeholder:text-on-surface-variant px-2 py-1.5 text-[15px] max-h-[200px]"
       />
       <button
         type="button"
@@ -57,8 +57,8 @@ export function ChatComposer({
         aria-label="Send"
         className={cn(
           "size-9 grid place-items-center rounded-md shrink-0 transition-all",
-          "bg-neon-blue text-pure-white hover:shadow-glow-primary",
-          "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none",
+          "bg-primary text-on-primary hover:bg-primary-hover shadow-sm",
+          "disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-sm",
         )}
       >
         <ArrowUp className="size-4" />

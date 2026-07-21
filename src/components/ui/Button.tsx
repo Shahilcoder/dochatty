@@ -7,41 +7,31 @@ type Size = "sm" | "md" | "lg";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
   size?: Size;
-  glow?: boolean;
   loading?: boolean;
 }
 
 const variantStyles: Record<Variant, string> = {
   primary:
-    "bg-neon-blue text-pure-white hover:shadow-glow-primary border border-neon-blue/40",
+    "bg-primary text-on-primary hover:bg-primary-hover shadow-sm hover:shadow-md",
   secondary:
-    "bg-warning-amber text-on-secondary hover:shadow-glow-secondary border border-warning-amber/40",
-  ghost:
-    "bg-transparent text-on-surface hover:bg-surface-container-high border border-transparent",
+    "bg-surface text-on-surface border border-outline hover:bg-surface-container-high shadow-sm",
   outline:
-    "bg-transparent text-on-surface border border-outline-variant hover:border-neon-blue hover:text-pure-white",
+    "bg-surface text-on-surface border border-outline hover:bg-surface-container-high shadow-sm",
+  ghost:
+    "bg-transparent text-on-surface-variant hover:bg-primary-container hover:text-on-primary-container",
   danger:
-    "bg-error-container text-on-error-container border border-error/40 hover:bg-error",
+    "bg-surface text-error border border-outline hover:bg-error-container hover:border-error/40 shadow-sm",
 };
 
 const sizeStyles: Record<Size, string> = {
-  sm: "h-8 px-3 text-[13px]",
-  md: "h-10 px-5 text-[15px]",
-  lg: "h-12 px-7 text-[16px]",
+  sm: "h-8 px-3 text-[13px] gap-1.5",
+  md: "h-10 px-5 text-[15px] gap-2",
+  lg: "h-12 px-7 text-[16px] gap-2",
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    {
-      className,
-      variant = "primary",
-      size = "md",
-      glow,
-      loading,
-      disabled,
-      children,
-      ...rest
-    },
+    { className, variant = "primary", size = "md", loading, disabled, children, ...rest },
     ref,
   ) => {
     return (
@@ -49,13 +39,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          "relative inline-flex items-center justify-center gap-2 rounded-md font-semibold uppercase tracking-[0.04em]",
+          "relative inline-flex items-center justify-center rounded-md font-semibold",
           "transition-all duration-150 ease-out",
-          "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none",
-          "active:translate-y-[1px]",
+          "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-sm",
+          "active:translate-y-[0.5px]",
           variantStyles[variant],
           sizeStyles[size],
-          glow && variant === "primary" && "shadow-glow-primary-soft",
           className,
         )}
         {...rest}

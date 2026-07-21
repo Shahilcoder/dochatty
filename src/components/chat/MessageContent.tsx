@@ -68,7 +68,9 @@ export function MessageContent({
           p: ({ children }) => <div className="chat-p">{transform(children)}</div>,
           li: ({ children }) => <li>{transform(children)}</li>,
           strong: ({ children }) => (
-            <strong className="text-pure-white">{transform(children)}</strong>
+            <strong className="text-on-surface font-semibold">
+              {transform(children)}
+            </strong>
           ),
           em: ({ children }) => <em>{transform(children)}</em>,
           a: ({ children, href }) => (
@@ -76,7 +78,7 @@ export function MessageContent({
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neon-blue underline underline-offset-2"
+              className="text-tertiary underline underline-offset-2"
             >
               {children}
             </a>

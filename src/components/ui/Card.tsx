@@ -16,14 +16,12 @@ export function Card({
     <div
       className={cn(
         "rounded-lg border transition-all duration-150",
-        tone === "default" &&
-          "bg-surface-container-low border-outline-variant/60",
-        tone === "raised" &&
-          "bg-surface-container border-outline-variant/60",
+        tone === "default" && "bg-surface border-outline shadow-sm",
+        tone === "raised" && "bg-surface border-outline shadow-md",
         tone === "primary" &&
-          "bg-surface-container-high border-neon-blue/30 shadow-glow-primary-soft",
+          "bg-primary-container border-primary/25 shadow-sm",
         interactive &&
-          "hover:border-neon-blue/60 hover:shadow-glow-primary cursor-pointer",
+          "hover:border-primary/40 hover:shadow-md cursor-pointer",
         className,
       )}
       {...rest}
@@ -53,7 +51,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        "text-pure-white text-[17px] font-semibold leading-tight",
+        "text-on-surface text-[17px] font-semibold leading-tight tracking-[-0.01em]",
         className,
       )}
       {...rest}
