@@ -75,33 +75,36 @@ export function UploadDropzone({
         onDrop={onDrop}
         disabled={busy}
         className={cn(
-          "w-full grid place-items-center text-center gap-3 px-6 py-10 rounded-lg border-2 border-dashed transition-all",
+          "w-full grid place-items-center text-center gap-3 px-6 py-12 rounded-lg border-2 border-dashed transition-all",
           dragging
-            ? "border-neon-blue bg-neon-blue/10 shadow-glow-primary"
-            : "border-outline-variant/70 hover:border-neon-blue/60 bg-surface-container-low/50",
+            ? "border-primary bg-primary-container/60"
+            : "border-outline hover:border-primary/60 bg-surface",
           busy && "cursor-wait",
         )}
       >
         {busy ? (
           <>
-            <Loader2 className="size-7 text-neon-blue animate-spin" />
+            <Loader2 className="size-7 text-primary animate-spin" />
             <div className="text-on-surface text-[15px]">
-              Processing <span className="text-pure-white">{currentName}</span>…
+              Processing{" "}
+              <span className="text-on-surface font-semibold">{currentName}</span>…
             </div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-on-surface-variant font-[var(--font-pixel)]">
-              parsing · embedding · indexing
+            <div className="text-[11px] uppercase tracking-[0.14em] text-on-surface-variant font-medium">
+              Parsing · Embedding · Indexing
             </div>
           </>
         ) : (
           <>
-            <UploadCloud className="size-7 text-neon-blue" />
+            <div className="size-12 grid place-items-center rounded-full bg-primary-container text-primary">
+              <UploadCloud className="size-6" />
+            </div>
             <div className="text-on-surface text-[15px]">
-              <span className="text-pure-white font-semibold">
+              <span className="text-on-surface font-semibold">
                 Drop a document
               </span>{" "}
               or click to browse
             </div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-on-surface-variant font-[var(--font-pixel)]">
+            <div className="text-[11px] uppercase tracking-[0.14em] text-on-surface-variant font-medium">
               PDF · DOCX · up to 25 MB
             </div>
           </>
@@ -109,7 +112,7 @@ export function UploadDropzone({
       </button>
 
       {error ? (
-        <div className="flex items-center gap-2 text-error text-[13.5px] mt-3 border-l-2 border-error pl-3 py-1">
+        <div className="flex items-center gap-2 text-on-error-container bg-error-container text-[13.5px] mt-3 rounded-md px-3 py-2">
           <AlertCircle className="size-4 shrink-0" />
           {error}
         </div>

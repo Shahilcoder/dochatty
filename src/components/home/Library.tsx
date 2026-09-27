@@ -7,9 +7,9 @@ import {
   Trash2,
   FileText,
   FileType2,
-  Clock,
   LogOut,
   Loader2,
+  MessagesSquare,
 } from "lucide-react";
 import type { DocumentSummary } from "@/lib/types";
 import { UploadDropzone } from "@/components/documents/UploadDropzone";
@@ -76,127 +76,147 @@ export function Library({
   }
 
   return (
-    <div className="relative min-h-screen">
-      <div aria-hidden className="scanlines absolute inset-0 opacity-40 pointer-events-none" />
-
-      <header className="relative z-10 flex items-center justify-between px-6 md:px-12 h-16 border-b border-outline-variant/50">
-        <div className="flex items-center gap-3">
-          <div className="size-9 grid place-items-center bg-neon-blue text-pure-white rounded-sm font-[var(--font-pixel-display)] text-[11px]">
-            DC
-          </div>
-          <div className="text-display-pixel text-pure-white text-[13px]">
-            DOCHATTY
-          </div>
+    <div className="min-h-screen flex flex-col md:flex-row">
+      {/* Sidebar — Evernote-style navigation rail */}
+      <aside className="md:w-72 shrink-0 md:h-screen md:sticky md:top-0 bg-surface border-b md:border-b-0 md:border-r border-outline flex flex-col">
+        <div className="flex items-center gap-2.5 px-5 h-16 shrink-0">
+          <BrandMark />
+          <span className="text-title text-on-surface">Dochatty</span>
         </div>
-        <div className="flex items-center gap-3">
-          {readyDocs.length > 0 ? (
-            <Button
-              variant="primary"
-              size="sm"
-              glow
-              disabled={busyId === "new"}
-              onClick={() => createConversation(readyDocs.map((d) => d.id))}
-            >
-              {busyId === "new" ? (
-                <Loader2 className="size-4 animate-spin" />
-              ) : (
-                <MessageSquarePlus className="size-4" />
-              )}
-              New chat
-            </Button>
-          ) : null}
-          <Button variant="ghost" size="sm" onClick={logout}>
+
+        <div className="px-4 pb-4">
+          <Button
+            variant="primary"
+            className="w-full"
+            disabled={readyDocs.length === 0 || busyId === "new"}
+            onClick={() => createConversation(readyDocs.map((d) => d.id))}
+          >
+            {busyId === "new" ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <MessageSquarePlus className="size-4" />
+            )}
+            New chat
+          </Button>
+        </div>
+
+        <div className="px-5 pt-1 pb-2">
+          <SectionLabel>Conversations</SectionLabel>
+        </div>
+        <nav className="flex-1 md:overflow-y-auto px-2 pb-2 space-y-0.5 max-h-64 md:max-h-none overflow-y-auto">
+          {conversations.length === 0 ? (
+            <p className="px-3 py-2 text-body-sm text-on-surface-variant">
+              Your chats will appear here.
+            </p>
+          ) : (
+            conversations.map((c) => (
+              <div
+                key={c.id}
+                onClick={() => router.push(`/chat/${c.id}`)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") router.push(`/chat/${c.id}`);
+                }}
+                className="group w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-left hover:bg-surface-container-high cursor-pointer transition-colors"
+              >
+                <MessagesSquare className="size-4 text-on-surface-variant shrink-0" />
+                <span className="flex-1 truncate text-on-surface text-[14px]">
+                  {c.title}
+                </span>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Delete conversation"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteConversation(c.id);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 focus:opacity-100 text-on-surface-variant hover:text-error transition-all p-0.5 rounded"
+                >
+                  <Trash2 className="size-3.5" />
+                </span>
+              </div>
+            ))
+          )}
+        </nav>
+
+        <div className="px-4 py-4 border-t border-outline shrink-0">
+          <Button variant="ghost" size="sm" className="w-full" onClick={logout}>
             <LogOut className="size-4" />
             Sign out
           </Button>
         </div>
-      </header>
+      </aside>
 
-      <main className="relative z-10 px-6 md:px-12 py-10 max-w-[1100px] mx-auto space-y-12">
-        <section>
-          <SectionLabel>Upload</SectionLabel>
-          <UploadDropzone
-            onUploaded={(doc) => {
-              startTransition(() => router.refresh());
-              createConversation([doc.id]);
-            }}
-          />
-        </section>
+      {/* Main content — the white-canvas library */}
+      <main className="flex-1 min-w-0 bg-background">
+        <div className="max-w-[900px] mx-auto px-5 md:px-12 py-10 md:py-14 space-y-12">
+          <header>
+            <h1 className="text-headline-xl text-on-surface">Your library</h1>
+            <p className="text-body-lg text-on-surface-variant mt-2 max-w-xl">
+              Upload a paper, contract, or spec — then ask. Every answer cites
+              its exact source.
+            </p>
+          </header>
 
-        <section>
-          <SectionLabel>
-            Documents{" "}
-            <span className="text-on-surface-variant">({documents.length})</span>
-          </SectionLabel>
-          {documents.length === 0 ? (
-            <EmptyHint>
-              No documents yet. Upload a PDF or Word file to get started.
-            </EmptyHint>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {documents.map((d) => (
-                <DocCard
-                  key={d.id}
-                  doc={d}
-                  busy={busyId === d.id}
-                  onAsk={() => createConversation([d.id])}
-                  onDelete={() => deleteDocument(d.id)}
-                />
-              ))}
+          <section>
+            <SectionLabel>Add a document</SectionLabel>
+            <div className="mt-3">
+              <UploadDropzone
+                onUploaded={(doc) => {
+                  startTransition(() => router.refresh());
+                  createConversation([doc.id]);
+                }}
+              />
             </div>
-          )}
-        </section>
+          </section>
 
-        <section>
-          <SectionLabel>
-            Conversations{" "}
-            <span className="text-on-surface-variant">
-              ({conversations.length})
-            </span>
-          </SectionLabel>
-          {conversations.length === 0 ? (
-            <EmptyHint>Your chats will appear here.</EmptyHint>
-          ) : (
-            <div className="space-y-2">
-              {conversations.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => router.push(`/chat/${c.id}`)}
-                  className="w-full group flex items-center gap-3 px-4 py-3 bg-surface-container-low border border-outline-variant/50 hover:border-neon-blue/50 rounded-md text-left transition-colors"
-                >
-                  <MessageSquarePlus className="size-4 text-neon-blue shrink-0" />
-                  <span className="flex-1 truncate text-on-surface text-[14.5px]">
-                    {c.title}
-                  </span>
-                  <span className="flex items-center gap-1 text-[11px] text-on-surface-variant font-[var(--font-pixel)] shrink-0">
-                    <Clock className="size-3" />
-                    {timeAgo(c.updatedAt)}
-                  </span>
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteConversation(c.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 text-on-surface-variant hover:text-error transition-all p-1"
-                  >
-                    <Trash2 className="size-3.5" />
-                  </span>
-                </button>
-              ))}
+          <section>
+            <SectionLabel>
+              Documents{" "}
+              <span className="text-on-surface-variant font-normal normal-case tracking-normal">
+                ({documents.length})
+              </span>
+            </SectionLabel>
+            <div className="mt-3">
+              {documents.length === 0 ? (
+                <EmptyHint>
+                  No documents yet. Upload a PDF or Word file to get started.
+                </EmptyHint>
+              ) : (
+                <div className="grid sm:grid-cols-2 gap-3">
+                  {documents.map((d) => (
+                    <DocCard
+                      key={d.id}
+                      doc={d}
+                      busy={busyId === d.id}
+                      onAsk={() => createConversation([d.id])}
+                      onDelete={() => deleteDocument(d.id)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-          )}
-        </section>
+          </section>
+        </div>
       </main>
 
       {pending ? (
-        <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 bg-surface-container-high border border-outline-variant/60 rounded-md px-3 py-2 text-[12px] text-on-surface-variant">
-          <Loader2 className="size-3.5 animate-spin text-neon-blue" />
+        <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 bg-surface border border-outline shadow-md rounded-md px-3 py-2 text-[12px] text-on-surface-variant">
+          <Loader2 className="size-3.5 animate-spin text-primary" />
           Refreshing
         </div>
       ) : null}
     </div>
+  );
+}
+
+function BrandMark() {
+  return (
+    <span className="size-9 grid place-items-center bg-primary text-on-primary rounded-lg shadow-sm">
+      <MessagesSquare className="size-5" />
+    </span>
   );
 }
 
@@ -213,19 +233,28 @@ function DocCard({
 }) {
   const isPdf = doc.mimeType === "application/pdf";
   return (
-    <div className="flex flex-col gap-3 p-4 bg-surface-container-low border border-outline-variant/50 rounded-lg">
+    <div className="flex flex-col gap-3 p-4 bg-surface border border-outline rounded-lg shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-start gap-3">
-        {isPdf ? (
-          <FileText className="size-5 text-neon-blue shrink-0 mt-0.5" />
-        ) : (
-          <FileType2 className="size-5 text-warning-amber shrink-0 mt-0.5" />
-        )}
+        <span
+          className={cn(
+            "size-9 grid place-items-center rounded-md shrink-0",
+            isPdf
+              ? "bg-primary-container text-primary"
+              : "bg-tertiary-container text-tertiary",
+          )}
+        >
+          {isPdf ? (
+            <FileText className="size-5" />
+          ) : (
+            <FileType2 className="size-5" />
+          )}
+        </span>
         <div className="min-w-0 flex-1">
-          <div className="text-pure-white text-[14px] font-medium truncate">
+          <div className="text-on-surface text-[14px] font-medium truncate">
             {doc.filename}
           </div>
-          <div className="text-[11px] text-on-surface-variant font-[var(--font-pixel)] mt-1">
-            {doc.pageCount ? `${doc.pageCount}p · ` : ""}
+          <div className="text-[12px] text-on-surface-variant mt-0.5">
+            {doc.pageCount ? `${doc.pageCount} pages · ` : ""}
             {formatBytes(doc.byteSize)}
           </div>
         </div>
@@ -238,7 +267,7 @@ function DocCard({
 
       <div className="flex items-center gap-2 mt-auto">
         <Button
-          variant="outline"
+          variant="secondary"
           size="sm"
           className="flex-1"
           disabled={doc.status !== "ready" || busy}
@@ -251,7 +280,7 @@ function DocCard({
           onClick={onDelete}
           disabled={busy}
           aria-label="Delete document"
-          className="size-9 grid place-items-center rounded-md border border-outline-variant/60 text-on-surface-variant hover:text-error hover:border-error/50 transition-colors disabled:opacity-50"
+          className="size-9 grid place-items-center rounded-md border border-outline text-on-surface-variant hover:text-error hover:border-error/40 hover:bg-error-container transition-colors disabled:opacity-50"
         >
           <Trash2 className="size-4" />
         </button>
@@ -267,27 +296,13 @@ function StatusChip({ status }: { status: DocumentSummary["status"] }) {
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-[12px] uppercase tracking-[0.2em] text-on-surface-variant font-[var(--font-pixel)] mb-4">
-      {children}
-    </h2>
-  );
+  return <h2 className="text-label text-on-surface-variant">{children}</h2>;
 }
 
 function EmptyHint({ children }: { children: React.ReactNode }) {
   return (
-    <div className={cn("px-4 py-8 text-center text-on-surface-variant text-[14px] border border-dashed border-outline-variant/50 rounded-lg")}>
+    <div className="px-4 py-10 text-center text-on-surface-variant text-[14px] border border-dashed border-outline rounded-lg bg-surface">
       {children}
     </div>
   );
-}
-
-function timeAgo(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const min = Math.floor(diff / 60000);
-  if (min < 1) return "now";
-  if (min < 60) return `${min}m`;
-  const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h`;
-  return `${Math.floor(hr / 24)}d`;
 }

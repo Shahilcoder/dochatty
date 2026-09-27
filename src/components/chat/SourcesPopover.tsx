@@ -7,7 +7,7 @@ import { citationHref } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 function locationLabel(c: Citation): string {
-  if (c.pageNumber != null) return `Page ${c.pageNumber}`;
+  if (c.pageNumber != null) return `p. ${c.pageNumber}`;
   if (c.heading) {
     return c.paragraphIdx != null
       ? `${c.heading} · ¶${c.paragraphIdx}`
@@ -55,30 +55,30 @@ export function SourcesPopover({
       ref={ref}
       role="dialog"
       className={cn(
-        "absolute z-50 left-0 top-[calc(100%+6px)] w-[320px]",
-        "bg-surface-container-high border border-neon-blue/40 rounded-md shadow-glow-primary-soft",
-        "p-3.5 text-left",
+        "absolute z-50 left-0 top-[calc(100%+8px)] w-[320px]",
+        "bg-surface border border-outline rounded-lg shadow-lg",
+        "p-4 text-left",
       )}
     >
-      <div className="flex items-center gap-2 mb-2">
-        <FileText className="size-3.5 text-neon-blue shrink-0" />
-        <span className="text-pure-white text-[13px] font-semibold truncate">
+      <div className="flex items-center gap-2 mb-1.5">
+        <FileText className="size-4 text-primary shrink-0" />
+        <span className="text-on-surface text-[13.5px] font-semibold truncate">
           {citation.filename}
         </span>
       </div>
-      <div className="text-[11px] uppercase tracking-[0.12em] text-neon-blue font-[var(--font-pixel)] mb-2.5">
+      <div className="font-mono text-[11px] text-on-primary-container bg-primary-container inline-flex rounded px-1.5 py-0.5 mb-3">
         {locationLabel(citation)}
       </div>
-      <p className="text-on-surface-variant text-[13px] leading-relaxed border-l-2 border-outline-variant pl-2.5 mb-3 max-h-[140px] overflow-y-auto">
+      <p className="text-on-surface-variant text-[13.5px] leading-relaxed border-l-2 border-primary/40 pl-3 mb-3.5 max-h-[140px] overflow-y-auto">
         {citation.snippet}
       </p>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 border-t border-outline-variant pt-3">
         {blobUrl ? (
           <a
             href={citationHref(blobUrl, citation)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[12px] text-neon-blue hover:text-pure-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-tertiary hover:underline underline-offset-2"
           >
             <ExternalLink className="size-3.5" />
             Open at this location
@@ -86,11 +86,11 @@ export function SourcesPopover({
         ) : null}
         <button
           onClick={copyQuote}
-          className="ml-auto inline-flex items-center gap-1.5 text-[12px] text-on-surface-variant hover:text-on-surface transition-colors"
+          className="ml-auto inline-flex items-center gap-1.5 text-[12.5px] text-on-surface-variant hover:text-on-surface transition-colors"
         >
           {copied ? (
             <>
-              <Check className="size-3.5 text-growth-green" />
+              <Check className="size-3.5 text-primary" />
               Copied
             </>
           ) : (

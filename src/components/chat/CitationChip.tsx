@@ -5,8 +5,11 @@ import type { Citation } from "@/lib/types";
 import { SourcesPopover } from "./SourcesPopover";
 
 /**
- * The trust feature. Inline pixel-bordered [n] marker; click to reveal the
- * exact source snippet and a link that opens the document at that location.
+ * The trust feature (DESIGN.md signature component). Inline the citation reads
+ * as a compact green-tinted pill with a green left accent and a mono numeral —
+ * the one place the calm, Inter-only system earns typographic contrast. Click
+ * to expand into the source card with the exact snippet and a link that opens
+ * the document at that location.
  */
 export function CitationChip({
   n,
@@ -22,8 +25,8 @@ export function CitationChip({
   // Unresolved citation (number with no matching source) — render inert.
   if (!citation) {
     return (
-      <span className="inline-flex items-center justify-center align-baseline border border-outline-variant text-on-surface-variant px-1 h-[16px] rounded-sm text-[10px] font-[var(--font-pixel)] mx-0.5 leading-none">
-        [{n}]
+      <span className="inline-flex items-center justify-center align-baseline mx-0.5 h-[18px] min-w-[18px] px-1 rounded-[5px] bg-surface-container-high text-on-surface-variant font-mono text-[11px] leading-none">
+        {n}
       </span>
     );
   }
@@ -34,9 +37,9 @@ export function CitationChip({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label={`Source ${n}: ${citation.filename}`}
-        className="inline-flex items-center justify-center align-baseline border border-neon-blue/60 text-neon-blue bg-neon-blue/10 hover:bg-neon-blue/25 hover:shadow-glow-primary px-1 h-[16px] rounded-sm text-[10px] font-[var(--font-pixel)] mx-0.5 leading-none transition-all cursor-pointer"
+        className="inline-flex items-center justify-center align-baseline mx-0.5 h-[18px] min-w-[18px] px-1 rounded-[5px] border-l-2 border-primary bg-primary-container text-on-primary-container hover:bg-primary hover:text-on-primary font-mono text-[11px] leading-none transition-colors cursor-pointer"
       >
-        [{n}]
+        {n}
       </button>
       {open ? (
         <SourcesPopover

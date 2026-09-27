@@ -2,10 +2,9 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, AlertCircle } from "lucide-react";
+import { AlertCircle, MessagesSquare } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { Chip } from "@/components/ui/Chip";
 
 export default function LoginPage() {
   const [password, setPassword] = useState("");
@@ -35,48 +34,24 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="relative min-h-screen grid place-items-center px-6 overflow-hidden">
-      <div
-        aria-hidden
-        className="scanlines absolute inset-0 opacity-40 pointer-events-none"
-      />
-      <div
-        aria-hidden
-        className="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(closest-side, color-mix(in oklab, var(--neon-blue) 30%, transparent), transparent)",
-        }}
-      />
-
-      <div className="relative z-10 w-full max-w-md">
-        <div className="flex items-center justify-center mb-8">
-          <div className="size-12 grid place-items-center bg-neon-blue text-pure-white rounded-sm font-[var(--font-pixel-display)] text-[14px] shadow-glow-primary-soft">
-            DC
-          </div>
+    <main className="min-h-screen grid place-items-center px-6 bg-background">
+      <div className="w-full max-w-sm">
+        <div className="flex flex-col items-center text-center mb-8">
+          <span className="size-12 grid place-items-center bg-primary text-on-primary rounded-xl shadow-sm mb-4">
+            <MessagesSquare className="size-6" />
+          </span>
+          <h1 className="text-headline-lg text-on-surface">Dochatty</h1>
+          <p className="text-body-md text-on-surface-variant mt-1">
+            Sign in to ask your documents.
+          </p>
         </div>
 
-        <div className="bg-surface-container-low/80 backdrop-blur-md border border-outline-variant/60 rounded-lg p-7">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <div className="text-display-pixel text-pure-white text-[14px]">
-                DOCHATTY
-              </div>
-              <div className="text-[11px] tracking-[0.2em] text-on-surface-variant uppercase mt-2 font-[var(--font-pixel)]">
-                Authentication required
-              </div>
-            </div>
-            <Chip tone="neon">
-              <Lock className="size-3" />
-              Gated
-            </Chip>
-          </div>
-
+        <div className="bg-surface border border-outline rounded-xl shadow-md p-7">
           <form onSubmit={onSubmit} className="space-y-5">
             <div>
               <label
                 htmlFor="password"
-                className="block text-[11px] tracking-[0.2em] uppercase text-on-surface-variant font-[var(--font-pixel)] mb-2"
+                className="block text-body-sm font-medium text-on-surface mb-1.5"
               >
                 Password
               </label>
@@ -85,7 +60,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 autoFocus
                 required
                 invalid={!!error}
@@ -93,7 +68,7 @@ export default function LoginPage() {
             </div>
 
             {error ? (
-              <div className="flex items-center gap-2 text-error text-[13.5px] border-l-2 border-error pl-3 py-1">
+              <div className="flex items-center gap-2 text-on-error-container bg-error-container text-[13.5px] rounded-md px-3 py-2">
                 <AlertCircle className="size-4 shrink-0" />
                 {error}
               </div>
@@ -105,15 +80,14 @@ export default function LoginPage() {
               size="lg"
               className="w-full"
               loading={isPending}
-              glow
             >
-              {isPending ? "Verifying" : "Enter"}
+              {isPending ? "Verifying" : "Sign in"}
             </Button>
           </form>
         </div>
 
-        <p className="text-center text-[11px] tracking-[0.18em] uppercase text-on-surface-variant font-[var(--font-pixel)] mt-6">
-          single-user gate · sessions valid 30 days
+        <p className="text-center text-[12px] text-on-surface-variant mt-6">
+          Single-user access · sessions valid 30 days
         </p>
       </div>
     </main>

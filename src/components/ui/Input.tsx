@@ -11,11 +11,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         ref={ref}
         className={cn(
-          "w-full bg-void-black/60 text-on-surface placeholder:text-outline placeholder:font-[var(--font-pixel)]",
-          "h-11 px-3 border-b-2 border-outline-variant",
+          "w-full bg-surface text-on-surface placeholder:text-on-surface-variant",
+          "h-11 px-3.5 border border-outline rounded-md",
           "outline-none transition-colors duration-150",
-          "focus:border-neon-blue",
-          invalid && "border-error focus:border-error",
+          "focus:border-primary focus:ring-2 focus:ring-primary/20",
+          invalid &&
+            "border-error focus:border-error focus:ring-error/20",
           className,
         )}
         {...rest}
@@ -25,7 +26,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 );
 Input.displayName = "Input";
 
-interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   invalid?: boolean;
 }
 
@@ -35,11 +37,11 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       <textarea
         ref={ref}
         className={cn(
-          "w-full bg-void-black/60 text-on-surface placeholder:text-outline",
-          "min-h-[60px] px-3 py-2 border-b-2 border-outline-variant rounded-none",
+          "w-full bg-surface text-on-surface placeholder:text-on-surface-variant",
+          "min-h-[60px] px-3.5 py-2.5 border border-outline rounded-md",
           "outline-none transition-colors duration-150 resize-none",
-          "focus:border-neon-blue",
-          invalid && "border-error focus:border-error",
+          "focus:border-primary focus:ring-2 focus:ring-primary/20",
+          invalid && "border-error focus:border-error focus:ring-error/20",
           className,
         )}
         {...rest}
