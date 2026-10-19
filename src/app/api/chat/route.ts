@@ -1,4 +1,4 @@
-import { asc, eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import {
   conversations,
@@ -67,9 +67,10 @@ export async function POST(request: Request) {
     })
     .from(messages)
     .where(eq(messages.conversationId, conversationId))
-    .orderBy(asc(messages.createdAt))
+    .orderBy(desc(messages.createdAt))
     .limit(HISTORY_TURNS * 2);
-  const history: ChatTurn[] = recent.map((m) => ({
+  // Newest-first to grab the latest turns, then back to chronological order.
+  const history: ChatTurn[] = recent.reverse().map((m) => ({
     role: (m.role as MessageRole) === "assistant" ? "model" : "user",
     text: m.content,
   }));
